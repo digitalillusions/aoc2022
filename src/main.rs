@@ -8,4 +8,5 @@ fn main() {
     three::rucksack();
     four::camp_cleanup();
     five::supply_stacks();
+    six::tuning_trouble();
 }
