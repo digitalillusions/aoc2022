@@ -11,7 +11,6 @@ pub fn tuning_trouble() {
     for (i, block) in contents.windows(4).enumerate() {
         let set: HashSet<&char> = HashSet::from_iter(block);
         if set.len() == 4 {
-            println!("{:?}", block);
             println!("\tPart 1: {}", i + 4);
             break;
         }
@@ -20,7 +19,6 @@ pub fn tuning_trouble() {
     for (i, block) in contents.windows(14).enumerate() {
         let set: HashSet<&char> = HashSet::from_iter(block);
         if set.len() == 14 {
-            println!("{:?}", block);
             println!("\tPart 2: {}", i + 14);
             break;
         }
