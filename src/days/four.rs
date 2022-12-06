@@ -1,6 +1,8 @@
 use std::fs;
 
 pub fn camp_cleanup() {
+    println!("Running day 4");
+
     let contents = fs::read_to_string("sample_files/04/sample.txt").unwrap();
     let ranges = contents
         .lines()
@@ -21,12 +23,12 @@ pub fn camp_cleanup() {
         .filter(|(a, b)| ((b.0 <= a.0) && (a.1 <= b.1)) || ((a.0 <= b.0) && (b.1 <= a.1)))
         .collect::<Vec<_>>();
 
-    println!("Part 1: {:?}", fully_intersecting_ranges.len());
+    println!("\tPart 1: {:?}", fully_intersecting_ranges.len());
 
     let partially_overlapping_ranges = ranges
         .iter()
         .filter(|(a, b)| ((a.0 <= b.0) && (b.0 <= a.1)) || ((b.0 <= a.0) && (a.0 <= b.1)))
         .collect::<Vec<_>>();
 
-    println!("Part 2: {:?}", partially_overlapping_ranges.len());
+    println!("\tPart 2: {:?}", partially_overlapping_ranges.len());
 }

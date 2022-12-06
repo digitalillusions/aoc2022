@@ -1,6 +1,8 @@
 use std::fs;
 
 pub fn calorie_counting() {
+    println!("Running day 1");
+
     let input = fs::read_to_string("sample_files/01/sample.txt").unwrap();
     let mut calories_per_elf = Vec::new();
     calories_per_elf.push(Vec::new());
@@ -20,12 +22,12 @@ pub fn calorie_counting() {
         .collect::<Vec<_>>();
     total_calories_per_elf.sort();
     println!(
-        "Part 1: Largest number of calories carried by a single elf {}",
+        "\tPart 1: Largest number of calories carried by a single elf {}",
         total_calories_per_elf.last().unwrap()
     );
 
     println!(
-        "Part 1: Number of calories carried by the elves with the 3 largest amounts of calories {}",
+        "\tPart 2: Number of calories carried by the elves with the 3 largest amounts of calories {}",
         total_calories_per_elf.iter().rev().take(3).sum::<usize>()
     );
 }

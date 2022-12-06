@@ -1,6 +1,7 @@
 use std::fs;
 
 pub fn rock_paper_scissors() {
+    println!("Running day 2");
     let rules = fs::read_to_string("sample_files/02/sample.txt")
         .unwrap()
         .lines()
@@ -38,7 +39,7 @@ pub fn rock_paper_scissors() {
         })
         .collect();
 
-    println!("Score of game: {:?}", score.iter().sum::<i32>());
+    println!("\tPart 1: {:?}", score.iter().sum::<i32>());
 
     let score_fixed: Vec<i32> = rules
         .iter()
@@ -65,5 +66,5 @@ pub fn rock_paper_scissors() {
         })
         .collect();
 
-    println!("Score of fixed game: {:?}", score_fixed.iter().sum::<i32>());
+    println!("\tPart 2: {:?}", score_fixed.iter().sum::<i32>());
 }

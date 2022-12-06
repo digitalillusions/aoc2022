@@ -3,6 +3,8 @@ use std::fs;
 use std::iter::zip;
 
 pub fn rucksack() {
+    println!("Running day 3");
+
     let priority_map = HashMap::<char, i32>::from_iter(zip(
         [
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
@@ -38,7 +40,7 @@ pub fn rucksack() {
         .iter()
         .map(|&item| priority_map.get(item).unwrap())
         .sum::<i32>();
-    println!("Part 1: {:?}", prio_sum);
+    println!("\tPart 1: {:?}", prio_sum);
 
     let badges = rucksacks
         .iter()
@@ -60,5 +62,5 @@ pub fn rucksack() {
         .iter()
         .map(|&item| priority_map.get(item).unwrap())
         .sum::<i32>();
-    println!("Part 2: {:?}", badges_prio_sum);
+    println!("\tPart 2: {:?}", badges_prio_sum);
 }
