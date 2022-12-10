@@ -10,4 +10,5 @@ fn main() {
     five::supply_stacks();
     six::tuning_trouble();
     seven::no_space_left();
+    eight::treetop_tree_house();
 }
