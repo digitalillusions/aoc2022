@@ -2,7 +2,7 @@ use std::fs;
 
 pub fn treetop_tree_house() {
     println!("Running day 8");
-    let contents = fs::read_to_string("sample_files/08/sample.txt").unwrap();
+    let contents = fs::read_to_string("sample_files/08/example.txt").unwrap();
     let mut grid: Vec<Vec<(u32, bool, [u32; 4])>> = Vec::from(Vec::new());
 
     for line in contents.lines() {
@@ -81,9 +81,23 @@ pub fn treetop_tree_house() {
         .filter(|(_, visible, _)| *visible)
         .count();
 
-    for row in grid {
+    for row in grid.iter() {
         println!("{:?}", row);
     }
 
     println!("\tPart 1: {}", n_visible);
+
+    let to_check = grid
+        .iter()
+        .enumerate()
+        .flat_map(|(i, inner_vec)| {
+            inner_vec
+                .iter()
+                .enumerate()
+                .map(move |(j, item)| (i, j, item))
+        })
+        .filter_map(|(i, j, item)| if item.1 { Some((i, j)) } else { None })
+        .collect::<Vec<_>>();
+
+    println!("Coordinates to check: {:?}", to_check);
 }
