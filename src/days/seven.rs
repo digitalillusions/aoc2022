@@ -41,9 +41,8 @@ pub fn no_space_left() {
 
     let contents = fs::read_to_string("sample_files/07/sample.txt").unwrap();
 
-    let root_dir = Rc::new(RefCell::new(Directory::new()));
+    let root_dir = Rc::new(RefCell::new(Directory::new().with_name("")));
     let mut current_dir: Rc<RefCell<Directory>> = root_dir.clone();
-    let mut file_size_count = 0;
 
     for line in contents.lines() {
         // Command
@@ -51,7 +50,6 @@ pub fn no_space_left() {
             // Change directory
             if let Some((_, directory)) = command.trim().split_once("cd") {
                 let directory = directory.trim();
-                println!("Change dir: {}", directory);
                 current_dir = match directory {
                     ".." => current_dir.borrow().parent.clone().unwrap(),
                     _ => {
@@ -72,14 +70,17 @@ pub fn no_space_left() {
                     }
                 }
             } else if let Some((_, _)) = command.trim().split_once("ls") {
-                println!("Listdir: {}", line)
             }
         } else {
             // Only option left is to read directory contents
             if let Some((left, dir_or_file)) = line.split_once(" ") {
                 // Read directory and files
                 if left == "dir" && !current_dir.borrow().subdirs.contains_key(dir_or_file) {
-                    let new_dir = Rc::new(RefCell::new(Directory::new().with_name(dir_or_file)));
+                    let new_dir = Rc::new(RefCell::new(
+                        Directory::new()
+                            .with_name(dir_or_file)
+                            .with_parent(current_dir.clone()),
+                    ));
                     current_dir
                         .borrow_mut()
                         .subdirs
@@ -94,7 +95,6 @@ pub fn no_space_left() {
                             .borrow_mut()
                             .files
                             .insert((file_size, dir_or_file.to_string()));
-                        file_size_count += file_size;
                     }
                 }
             }
@@ -103,11 +103,34 @@ pub fn no_space_left() {
 
     let mut list_of_dirs: Vec<(String, u64)> = Vec::new();
     let total_fs_size = eval_dir_sizes("".to_string(), root_dir, &mut list_of_dirs);
-    println!("Total fs: {:?}", list_of_dirs);
-    println!("Total fs size: {}", total_fs_size);
-    println!("\tPart 1: {}", file_size_count);
+
+    let size_of_small_dirs = list_of_dirs
+        .iter()
+        .filter_map(|(_, size)| if *size <= 100000 { Some(size) } else { None })
+        .sum::<u64>();
+
+    println!("\tPart 1: {}", size_of_small_dirs);
+
+    let space_needed_for_update = 30000000 - (70000000 - total_fs_size);
+    let mut potential_deleted_directories = list_of_dirs
+        .iter()
+        .filter_map(|(_, size)| {
+            if *size >= space_needed_for_update {
+                Some(size)
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<_>>();
+    potential_deleted_directories.sort();
+
+    println!(
+        "\tPart 2: {}",
+        potential_deleted_directories.first().unwrap()
+    );
 }
 
+// Recursive function to evaluate dir sizes
 fn eval_dir_sizes(
     path_to_current_root: String,
     current_root: Rc<RefCell<Directory>>,
