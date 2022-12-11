@@ -1,8 +1,8 @@
-use std::fs;
+use std::{fs, ops::Sub};
 
 pub fn treetop_tree_house() {
     println!("Running day 8");
-    let contents = fs::read_to_string("sample_files/08/example.txt").unwrap();
+    let contents = fs::read_to_string("sample_files/08/sample.txt").unwrap();
     let mut grid: Vec<Vec<(u32, bool, [u32; 4])>> = Vec::from(Vec::new());
 
     for line in contents.lines() {
@@ -58,7 +58,6 @@ pub fn treetop_tree_house() {
     );
     // Check visibility
     for (i, row) in grid.iter_mut().rev().enumerate() {
-        println!("{}", i);
         max_right = row.last().unwrap().0;
         for (j, (height, visible, view_distance)) in row.iter_mut().rev().enumerate() {
             // Check visibility from right
@@ -81,10 +80,6 @@ pub fn treetop_tree_house() {
         .filter(|(_, visible, _)| *visible)
         .count();
 
-    for row in grid.iter() {
-        println!("{:?}", row);
-    }
-
     println!("\tPart 1: {}", n_visible);
 
     let to_check = grid
@@ -99,5 +94,63 @@ pub fn treetop_tree_house() {
         .filter_map(|(i, j, item)| if item.1 { Some((i, j)) } else { None })
         .collect::<Vec<_>>();
 
-    println!("Coordinates to check: {:?}", to_check);
+    for (x, y) in to_check.iter() {
+        let (height, _, _) = grid.get(*x).unwrap().get(*y).unwrap().clone();
+        let mut visibility = 0;
+        for i in *x + 1..n_rows + 1 {
+            let (h, _, _) = grid.get(i).unwrap().get(*y).unwrap();
+            if *h < height {
+                visibility += 1;
+            } else {
+                visibility += 1;
+                break;
+            }
+        }
+        grid.get_mut(*x).unwrap().get_mut(*y).unwrap().2[2] = visibility;
+
+        visibility = 0;
+        for i in (0..*x).rev() {
+            let (h, _, _) = grid.get(i).unwrap().get(*y).unwrap();
+            if *h < height {
+                visibility += 1;
+            } else {
+                visibility += 1;
+                break;
+            }
+        }
+        grid.get_mut(*x).unwrap().get_mut(*y).unwrap().2[0] = visibility;
+
+        visibility = 0;
+        for j in *y + 1..n_columns + 1 {
+            let (h, _, _) = grid.get(*x).unwrap().get(j).unwrap();
+            if *h < height {
+                visibility += 1;
+            } else {
+                visibility += 1;
+                break;
+            }
+        }
+        grid.get_mut(*x).unwrap().get_mut(*y).unwrap().2[3] = visibility;
+
+        visibility = 0;
+        for j in (0..*y).rev() {
+            let (h, _, _) = grid.get(*x).unwrap().get(j).unwrap();
+            if *h < height {
+                visibility += 1;
+            } else {
+                visibility += 1;
+                break;
+            }
+        }
+        grid.get_mut(*x).unwrap().get_mut(*y).unwrap().2[1] = visibility;
+    }
+
+    let max_score = grid
+        .iter()
+        .flatten()
+        .map(|(_, _, v)| v[0] * v[1] * v[2] * v[3])
+        .max()
+        .unwrap();
+
+    println!("\tPart 2: {}", max_score);
 }
