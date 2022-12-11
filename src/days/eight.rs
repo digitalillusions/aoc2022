@@ -1,4 +1,4 @@
-use std::{fs, ops::Sub};
+use std::fs;
 
 pub fn treetop_tree_house() {
     println!("Running day 8");
@@ -27,7 +27,7 @@ pub fn treetop_tree_house() {
     // Check visibility
     for (i, row) in grid.iter_mut().enumerate() {
         max_left = row.first().unwrap().0;
-        for (j, (height, visible, view_distance)) in row.iter_mut().enumerate() {
+        for (j, (height, visible, _)) in row.iter_mut().enumerate() {
             // Mark border of forest
             if i == 0 || i == n_rows || j == 0 || j == n_columns {
                 *visible = true;
@@ -57,9 +57,9 @@ pub fn treetop_tree_house() {
             .map(|(height, _, _)| height),
     );
     // Check visibility
-    for (i, row) in grid.iter_mut().rev().enumerate() {
+    for (_, row) in grid.iter_mut().rev().enumerate() {
         max_right = row.last().unwrap().0;
-        for (j, (height, visible, view_distance)) in row.iter_mut().rev().enumerate() {
+        for (j, (height, visible, _)) in row.iter_mut().rev().enumerate() {
             // Check visibility from right
             if *height > max_right {
                 *visible = true;
