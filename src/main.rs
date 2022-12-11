@@ -11,4 +11,5 @@ fn main() {
     six::tuning_trouble();
     seven::no_space_left();
     eight::treetop_tree_house();
+    nine::rope_bridge();
 }
